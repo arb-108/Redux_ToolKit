@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
-import { TodoContext } from '../contexts/todocontext';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../features/todoReducer';
 
 const TodoInput = () => {
-    const [todotext,settodotext]=useState()
-    const {addTodo} = TodoContext();
+    const [todotext,settodotext]=useState('')
+    const dispatch=useDispatch();
     const addClick=()=>{
-
         if(todotext.trim()===''){
             return;
         }
-        addTodo({
-            id:Date.now(),
-            title:todotext,
-            completed:false
-        });
+        dispatch(addTodo(todotext));
         settodotext('');
     }
+    
   return (
     <div className='flex bg-gray-100 shadow rounded'>
         <input type='text' placeholder='Add a todo' className='flex-1 pl-2 focus:outline-none 

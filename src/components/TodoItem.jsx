@@ -2,27 +2,29 @@ import React, { useRef, useState } from 'react'
 import { CiEdit } from "react-icons/ci";
 import { FaSave } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
-import { TodoContext } from '../contexts/todocontext';
+// import { TodoContext } from '../contexts/todocontext';
+import { useDispatch } from 'react-redux';
+import { deleteTodo, toggleTodo, updateTodo } from '../features/todoReducer.js';
 
 const TodoItem = ({ todo }) => {
     const [todotext, settodotext] = useState(todo.title);
     const [completed, setcompleted] = useState(todo.completed);
     const [editabled, seteditabled] = useState(false);
 
+    const dispatch=useDispatch();
     const inputref=useRef(null);
 
-    const {todos,addTodo,removeTodo,editTodo,toggleTodo}=TodoContext();
-    const updateTodo=()=>{
-        editTodo(todo.id,{...todo,title:todotext});
+    const updateTodoValue=()=>{
+        dispatch(updateTodo(todo.id,{title:todotext}));
         seteditabled((pre)=>!pre);
     }
     const updatecompleted=()=>{
         // setcompleted((pre)=>!pre);
-        toggleTodo(todo.id);
+        dispatch(toggleTodo(todo.id));
         seteditabled(false);    
     }
     const deletetodo=()=>{
-        removeTodo(todo.id);
+        dispatch(deleteTodo(todo.id));
     }
     const handleEdit=()=>{  
         seteditabled((pre)=>!pre);
@@ -45,7 +47,7 @@ const TodoItem = ({ todo }) => {
                 <button disabled={todo.completed}>
                 {
 
-                    editabled?<FaSave className='text-2xl cursor-pointer' onClick={updateTodo}/>:
+                    editabled?<FaSave className='text-2xl cursor-pointer' onClick={updateTodoValue}/>:
                     <CiEdit className='text-2xl cursor-pointer'  
                     onClick={handleEdit}
                     />
